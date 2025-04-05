@@ -175,3 +175,7 @@ docker-compose run --rm inferencia
 ## Licença
 
 Projeto licenciado sob a [MIT License](LICENSE).
+
+
+certutil -decode bestseller_value_advisor.zip.b64 bestseller_value_advisor.zip
+Expand-Archive bestseller_value_advisor.zip -DestinationPath .

@@ -163,40 +163,84 @@ graph TD
 ```
 bestseller-value-advisor/
 ├── data/
-│   ├── raw/                    	 # Dados originais
-│   │   ├── best_sellers.csv         # Dataset Kaggle original
-│   │   └── not_best_sellers.csv     # Dataset secundário
-│   └── processed/                   # Dados pré-processados
+│   ├── raw/                         # Dados originais que o usuário pode enviar
+│   │   ├── best_sellers.csv        # (Exemplo) Dataset original do Kaggle
+│   │   └── not_best_sellers.csv    # (Exemplo) Dados complementares
+│   └── processed/                  # Dados processados/logs temporários
+│                                   # (podem ser limpos a qualquer momento)
 │
-├── notebooks/
-│   ├── exploration.ipynb            # EDA e experimentos
-│   └── autoencoder_training.ipynb   # Scripts de treinamento do autoencoder
+├── services/
+│   ├── backend/
+│   │   ├── model_training/
+│   │   │   ├── src/
+│   │   │   │   ├── model/                        # Código da arquitetura do modelo
+│   │   │   │   │   └── autoencoder.py            # Definição do modelo em si
+│   │   │   │   └── train.py                      # Pipeline de treinamento principal
+│   │   │   ├── trained_models/                   # Modelos treinados salvos (artefatos)
+│   │   │   ├── Dockerfile
+│   │   │   ├── requirements.txt
+│   │   │   └── tests/                            # Testes focados em treinamento
+│   │   │       └── test_training.py
+│   │   │
+│   │   ├── inference/
+│   │   │   ├── src/
+│   │   │   │   └── inference.py                  # Rotina de inferência (preço, ano, etc.)
+│   │   │   ├── Dockerfile
+│   │   │   ├── requirements.txt
+│   │   │   └── tests/                            # Testes focados em inferência
+│   │   │       └── test_inference.py
+│   │   │
+│   │   ├── data_ingestion/ (opcional)            # Exemplo: serviço de ingestão de dados
+│   │   │   ├── src/
+│   │   │   │   └── ingest_data.py                # Leitura do CSV e inserção no DB
+│   │   │   ├── Dockerfile
+│   │   │   ├── requirements.txt
+│   │   │   └── tests/
+│   │   │       └── test_data_ingestion.py
+│   │   │
+│   │   ├── schemas/                              # Schemas de validação (pydantic, marshmallow, etc.)
+│   │   ├── scaler/                               # Scalers, transformações serializadas
+│   │   ├── scripts/                      # Scripts auxiliares (ex: data cleaning)
+│   │   │   └── data_cleaning.py
+│   │   ├── Dockerfile (opcional, caso queira empacotar todo o backend)
+│   │   └── tests/                                # Testes gerais do backend (separados ou integrados)
+│   │       └── test_backend.py
+│   │
+│   ├── database/
+│   │   ├── scripts/
+│   │   │   ├── init.sql                          # Script de criação de tabelas
+│   │   │   └── seed.sql                          # Script de "seed" inicial
+│   │   ├── db_connection.py                      # Módulo de conexão/configuração do DB
+│   │   ├── README.md                             # Instruções de uso do DB
+│   │   └── tests/
+│   │       └── test_database.py
+│   │
+│   ├── frontend/
+│   │   ├── src/
+│   │   │   ├── streamlit_app.py                  # Aplicação Streamlit
+│   │   │   └── pages/
+│   │   │       ├── 1_Nova_Inferencia.py
+│   │   │       ├── 2_Treinar_Modelo.py
+│   │   │       └── 3_Inserir_CSV.py
+│   │   ├── public/                               # Arquivos estáticos (se necessário)
+│   │   ├── tests/
+│   │   │    └── test_streamlit.py
+│   │   ├── Dockerfile
+│   │   ├── requirements.txt
+│   │   └── README.md
+│   │
+│   ├── config/
+│   │   ├── settings.py                           # Configurações globais de ambientes
+│   │   └── .env.example                          # Exemplo de variáveis de ambiente locais
+│   │
+│   └── tests/                                    # (Opcional) Se quiser agrupar testes de "nível de serviço"
+│       └── test_services_integration.py
 │
-├── models/                      	 # Modelos treinados
-├── scaler/                			 # Scalers utilizados
-├── schemas/                     	 # Schemas de validação e estrutura de dados
-├── scripts/                   	     # Scripts auxiliares (limpeza, etc.)
-│   └── data_cleaning.py        	 # Script de limpeza dos dados
-│
-├── src/
-│   ├── app/                   	 	 # Aplicação Streamlit
-│   │   └── streamlit_app.py         # Aplicação Streamlit
-│   ├── db/
-│   │   └── db_connection.py         # Conexão com BD
-│   ├── model/
-│   │   ├── autoencoder.py           # Definição do modelo
-│   │   └── inference.py             # Rotina de inferência e otimização (preço/ano)
-│   ├── settings.py                  # Configurações globais
-│   └── utils/                       # Funções auxiliares│
-├── docs/
-│   └── README.md                    # Documentação adicional
-│
-├── docker-compose.yml               # Orquestração de containers
-├── Dockerfile                       # Dockerfile da aplicação
-├── pyproject.toml                   # Configuração do Poetry
-├── poetry.lock
-├── requirements.txt                 # Lista de dependências
-└── README.md                        # Documentação principal (este arquivo)
+├── .env                                          # Arquivo de variáveis de ambiente global (ex. p/ docker-compose)
+├── docker-compose.yml                            # Orquestração dos vários containers (DB, backend, etc.)
+├── README.md                                     # Documentação principal do projeto
+├── .gitignore
+└── .dockerignore
 ```
 
 ---

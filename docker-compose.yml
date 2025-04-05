@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+
+  frontend:
+    build:
+      context: .
+      dockerfile: services/frontend/Dockerfile
+    container_name: streamlit-frontend
+    ports:
+      - "8501:8501"
+    # volumes:
+    #   - .:/app
+    depends_on:
+      - mock-backend
+    environment:
+      # - ENDPOINT_URL=http://mock-backend
+      # - ENDPOINT_PORT=8000
+      # - ENDPOINT_INFERENCIA=/inferir
+      # - ENDPOINT_TREINAMENTO=/treinar
+      # - ENDPOINT_INGESTAO=/ingest
+      - SHOW_TEST_BUTTON=true
+      # - PYTHONUNBUFFERED=1
+
+  # db:
+  #   image: postgres:15
+  #   container_name: postgres_db
+  #   restart: always
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     POSTGRES_USER: user
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: bestsellers
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+
+  # modelo:
+  #   build: ./model_training
+  #   command: ["python", "train.py"]
+  #   depends_on:
+  #     - db
+
+  # inferencia:
+  #   build: ./inference
+  #   command: ["python", "infer.py"]
+  #   depends_on:
+  #     - db
+
+  mock-backend:
+    image: mock-backend
+    container_name: mock-backend-container
+    ports:
+      - "8000:8000"
+
+volumes:
+  pgdata:
