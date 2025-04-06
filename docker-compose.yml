@@ -42,8 +42,8 @@ services:
       - "8501:8501"
     # volumes:
     #   - .:/app
-    depends_on:
-      - mock-backend
+    # depends_on:
+    #   - mock-backend
     environment:
       # - ENDPOINT_URL=http://mock-backend
       # - ENDPOINT_PORT=8000
@@ -53,11 +53,28 @@ services:
       - SHOW_TEST_BUTTON=true
       # - PYTHONUNBUFFERED=1
 
-  # modelo:
-  #   build: ./model_training
-  #   command: ["python", "train.py"]
-  #   depends_on:
-  #     - db
+  model_training:
+    build:
+      context: .
+      dockerfile: ./services/backend/model_training/Dockerfile
+    image: bestseller/model_training
+    container_name: bestseller-model-training-container
+    volumes:
+      # Mapeia a pasta local de artefatos para dentro do container
+      - ./services/backend/trained_models:/services/trained_models
+      - ./services/backend/model_training/src:/app/src
+    # depends_on:
+      # - db
+    # Exemplo de comando para rodar o uvicorn e expor o servi�o de treinamento (ajuste conforme necess�rio)
+    # command: uvicorn services.backend.model_training.src.train:app --host 0.0.0.0 --port 8002
+    ports:
+      - "8002:8000"  # Porta externa 8002, interna 8000
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=user
+      - DB_PASS=password
+      - DB_NAME=bestsellers
 
   # inferencia:
   #   build: ./inference
@@ -72,7 +89,7 @@ services:
     image: bestseller/mock-backend
     container_name: bestseller-mock-backend-container
     ports:
-      - "8000:8000"
+      - "8000:8000"  # Porta externa 8000, interna 8000
 
 volumes:
   pgdata:

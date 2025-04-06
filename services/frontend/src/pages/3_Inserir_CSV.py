@@ -48,6 +48,9 @@ if arquivo:
             # response = requests.post(INGESTAO_URL, files={"file": arquivo})
             arquivo.seek(0)
             
+            if "modo_teste" not in st.session_state:
+                st.session_state["modo_teste"] = False
+            
             if "endpoints" not in st.session_state:
                 st.session_state["endpoints"] = (
                     settings.ENDPOINTS_MOCK if st.session_state["modo_teste"] else settings.ENDPOINTS

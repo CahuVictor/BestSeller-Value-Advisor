@@ -1,4 +1,22 @@
-tensorflow
-pandas
-numpy
-scikit-learn
+# Framework web e servidor
+fastapi==0.95.0
+uvicorn==0.22.0
+
+# Manipulação de dados
+pandas==1.5.3
+numpy==1.23.5
+
+# Conexão com PostgreSQL
+psycopg2-binary==2.9.6
+
+# Ferramentas de ML
+scikit-learn==1.2.2
+tensorflow==2.11.0
+joblib==1.2.0
+
+# Validação de dados e outras utilidades
+pydantic==1.10.4
+python-dotenv==1.0.0
+
+# Testes (opcional, caso queira usar o pytest)
+pytest==7.2.0

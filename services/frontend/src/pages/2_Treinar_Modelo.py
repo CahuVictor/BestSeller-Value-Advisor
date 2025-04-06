@@ -7,7 +7,17 @@ from services.config import settings
 st.title("🧠 Treinar Modelo")
 
 if st.button("Executar treinamento"):
-    url = st.session_state.get("url_base", "http://backend:8000") + "/treinar"
+    
+    if "modo_teste" not in st.session_state:
+        st.session_state["modo_teste"] = False
+    
+    if "endpoints" not in st.session_state:
+        st.session_state["endpoints"] = (
+            settings.ENDPOINTS_MOCK if st.session_state["modo_teste"] else settings.ENDPOINTS
+        )
+
+    # Usa o endpoint correto
+    url = st.session_state["endpoints"]["TREINAMENTO"]
     try:
         # response = requests.post(TREINO_URL)
         # url = settings.ENDPOINTS["TREINAMENTO"]

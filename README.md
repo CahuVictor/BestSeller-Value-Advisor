@@ -163,11 +163,12 @@ graph TD
 ```
 bestseller-value-advisor/
 ├── data/
-│   ├── raw/                         # Dados originais que o usuário pode enviar
-│   │   ├── best_sellers.csv        # (Exemplo) Dataset original do Kaggle
-│   │   └── not_best_sellers.csv    # (Exemplo) Dados complementares
-│   └── processed/                  # Dados processados/logs temporários
-│                                   # (podem ser limpos a qualquer momento)
+│   ├── raw/                                      # Dados originais que o usuário pode enviar
+│   │   ├── best_sellers.csv                      # (Exemplo) Dataset original do Kaggle
+│   │   └── not_best_sellers.csv                  # (Exemplo) Dados complementares
+│   │   └── not_table_validate.csv                # (Exemplo) Tabela não validada de dados
+│   └── processed/                                # Dados processados/logs temporários
+│                                                 # (podem ser limpos a qualquer momento)
 │
 ├── services/
 │   ├── backend/
@@ -199,7 +200,10 @@ bestseller-value-advisor/
 │   │   │       └── test_data_ingestion.py
 │   │   │
 │   │   ├── schemas/                              # Schemas de validação (pydantic, marshmallow, etc.)
-│   │   ├── scaler/                               # Scalers, transformações serializadas
+│   │   ├── trained_models/                       # Modelos treinados salvos (artefatos)
+│   │   │   ├── scaler/                           # Scalers, transformações serializadas
+│   │   │   ├── model/                            # 
+│   │   │   └── analyse/                          # 
 │   │   ├── scripts/                      # Scripts auxiliares (ex: data cleaning)
 │   │   │   └── data_cleaning.py
 │   │   ├── Dockerfile (opcional, caso queira empacotar todo o backend)

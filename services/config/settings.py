@@ -3,9 +3,10 @@ import os
 # Hosts separados por ambiente
 URL_MOCK = os.getenv("ENDPOINT_URL_MOCK", "http://mock-backend")
 URL_INGEST = os.getenv("ENDPOINT_URL_INGEST", "http://data_ingestion")
+URL_MODEL_TRAINING = os.getenv("ENDPOINT_URL_MODEL_TRAINING", "http://model_training")
 
 ENDPOINT_INFERENCIA = "/inferir"
-ENDPOINT_TREINAMENTO = "/treinar"
+ENDPOINT_TREINAMENTO = "/model_training"
 ENDPOINT_INGESTAO = "/data_ingestion"
 
 PORT = os.getenv("ENDPOINT_PORT", "8000")
@@ -14,6 +15,7 @@ PORT = os.getenv("ENDPOINT_PORT", "8000")
 
 BASE_MOCK = f"{URL_MOCK}:{PORT}"
 BASE_INGEST = f"{URL_INGEST}:{PORT}"
+BASE_MODEL_TRAINING = f"{URL_MODEL_TRAINING}:{PORT}"
 
 ENDPOINTS_MOCK = {
     "INFERENCIA": BASE_MOCK + os.getenv("ENDPOINT_INFERENCIA", ENDPOINT_INFERENCIA),
@@ -23,7 +25,7 @@ ENDPOINTS_MOCK = {
 
 ENDPOINTS = {
     "INFERENCIA": BASE_MOCK + os.getenv("ENDPOINT_INFERENCIA", ENDPOINT_INFERENCIA),
-    "TREINAMENTO": BASE_MOCK + os.getenv("ENDPOINT_TREINAMENTO", ENDPOINT_TREINAMENTO),
+    "TREINAMENTO": BASE_MODEL_TRAINING + os.getenv("ENDPOINT_TREINAMENTO", ENDPOINT_TREINAMENTO),
     "INGESTAO": BASE_INGEST + os.getenv("ENDPOINT_INGESTAO", ENDPOINT_INGESTAO)
 }
 
@@ -41,3 +43,18 @@ CSV_TABLE_MAPPING = {
     "best_sellers.csv": "best_sellers_csv",
     "not_best_sellers.csv": "not_best_sellers_csv"
 }
+
+# -------------------------------------------------
+# NOVAS CONFIGURAÇÕES PARA O SERVIÇO DE TREINAMENTO
+# -------------------------------------------------
+
+# Tabelas que serão utilizadas no treinamento:
+TABLE_BEST_SELLERS = CSV_TABLE_MAPPING[VALID_CSV_FILES[0]]
+TABLE_NOT_BEST_SELLERS = CSV_TABLE_MAPPING[VALID_CSV_FILES[1]]
+
+# Caminho (interno ao container) para salvar os artefatos do modelo
+TRAINED_MODELS_DIR = "/services/trained_models"
+
+# Nomes dos arquivos do modelo e scaler
+TFLITE_MODEL_FILENAME = "model.tflite"
+SCALER_FILENAME = "scaler.pkl"
