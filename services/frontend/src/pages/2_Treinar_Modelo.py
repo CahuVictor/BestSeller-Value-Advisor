@@ -5,6 +5,7 @@ sys.path.append('/app')
 from services.config import settings
 
 st.title("🧠 Treinar Modelo")
+# st.header("🧠 Treinar Modelo")
 
 if st.button("Executar treinamento"):
     
@@ -28,5 +29,7 @@ if st.button("Executar treinamento"):
             st.success(f"Resultado: {result['mensagem']}")
         else:
             st.error("Erro ao treinar modelo.")
+            # result = response.json()
+            # st.success(f"Resultado: {result['mensagem']}")
     except Exception as e:
         st.error(f"Erro de conexão com backend: {e}")

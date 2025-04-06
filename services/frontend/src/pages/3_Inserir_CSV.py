@@ -6,6 +6,7 @@ sys.path.append('/app')
 from services.config import settings
 
 st.title("📥 Inserir CSV")
+# st.header("📤 Inserir CSV no Banco")
 
 arquivo = st.file_uploader("Selecione um CSV", type="csv")
 if arquivo:
@@ -30,7 +31,7 @@ if arquivo:
         
         arquivo.seek(0)
         df = pd.read_csv(arquivo, sep=";")
-        
+        st.write("Pré-visualização dos dados:")
         st.dataframe(df.head())
         
     except Exception as e:
@@ -40,8 +41,6 @@ if arquivo:
     if df.empty or df.columns.size == 0:
         st.error("CSV vazio ou sem colunas.")
         st.stop()
-
-    st.dataframe(df.head())
 
     if st.button("Enviar CSV para backend"):
         try:
@@ -65,7 +64,11 @@ if arquivo:
             )
             if response.status_code == 200:
                 st.success("CSV inserido com sucesso!")
+                # result = response.json()
+                # st.success(f"Resultado: {result['mensagem']}")
             else:
                 st.error("Erro ao inserir CSV.")
+                # result = response.json()
+                # st.success(f"Resultado: {result['mensagem']}")
         except Exception as e:
             st.error(f"Erro ao conectar com backend: {e}")
