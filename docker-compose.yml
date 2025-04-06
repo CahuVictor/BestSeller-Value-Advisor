@@ -2,11 +2,42 @@ version: "3.9"
 
 services:
 
+  data_ingestion:
+    build:
+      context: .
+      dockerfile: ./services/backend/data_ingestion/Dockerfile
+    image: bestseller/data_ingestion
+    container_name: bestseller-data-ingestion-container
+    ports:
+      - "8001:8000"  # Porta externa 8001, interna 8000
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=user
+      - DB_PASS=password
+      - DB_NAME=bestsellers
+
+  db:
+    image: postgres:15
+    container_name: bestseller-postgres_db-container
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: bestsellers
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # - db_data:/var/lib/postgresql/data
+      - ./services/database/scripts:/docker-entrypoint-initdb.d
+
   frontend:
     build:
       context: .
       dockerfile: services/frontend/Dockerfile
-    container_name: streamlit-frontend
+    image: bestseller/streamlit
+    container_name: bestseller-streamlit-container
     ports:
       - "8501:8501"
     # volumes:
@@ -22,19 +53,6 @@ services:
       - SHOW_TEST_BUTTON=true
       # - PYTHONUNBUFFERED=1
 
-  # db:
-  #   image: postgres:15
-  #   container_name: postgres_db
-  #   restart: always
-  #   ports:
-  #     - "5432:5432"
-  #   environment:
-  #     POSTGRES_USER: user
-  #     POSTGRES_PASSWORD: password
-  #     POSTGRES_DB: bestsellers
-  #   volumes:
-  #     - pgdata:/var/lib/postgresql/data
-
   # modelo:
   #   build: ./model_training
   #   command: ["python", "train.py"]
@@ -48,8 +66,11 @@ services:
   #     - db
 
   mock-backend:
-    image: mock-backend
-    container_name: mock-backend-container
+    build:
+      context: .
+      dockerfile: ./services/frontend/tests/Dockerfile
+    image: bestseller/mock-backend
+    container_name: bestseller-mock-backend-container
     ports:
       - "8000:8000"
 

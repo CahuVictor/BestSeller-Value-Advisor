@@ -47,8 +47,15 @@ if arquivo:
         try:
             # response = requests.post(INGESTAO_URL, files={"file": arquivo})
             arquivo.seek(0)
-            # url = settings.ENDPOINTS["INGESTAO"]
-            url = st.session_state.get("url_base", "http://backend:8000") + "/ingest"
+            
+            if "endpoints" not in st.session_state:
+                st.session_state["endpoints"] = (
+                    settings.ENDPOINTS_MOCK if st.session_state["modo_teste"] else settings.ENDPOINTS
+                )
+
+            # Usa o endpoint correto
+            url = st.session_state["endpoints"]["INGESTAO"]
+            
             response = requests.post(
                 url,
                 files={"file": (arquivo.name, arquivo, "text/csv")}

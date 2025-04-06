@@ -2,19 +2,25 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# COPY ./requirements.txt .
+# # Set environment
+# ENV PYTHONDONTWRITEBYTECODE 1
+# ENV PYTHONUNBUFFERED 1
 
+# Install dependencies
 # Copiando os arquivos a partir da RAIZ do projeto
 COPY services/frontend/requirements.txt .
 
 # RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# COPY . .
-# COPY src/ src/
+# Copy project files
 COPY services/frontend/src/ src/
 
 # COPY ../config/ services/config/
 COPY services/config/ services/config/
 
+# Expose Streamlit port
+# EXPOSE 8501
+
+# Run Streamlit
 CMD ["streamlit", "run", "./src/streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]

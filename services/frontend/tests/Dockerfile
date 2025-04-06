@@ -2,15 +2,22 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY . .
-# COPY requirements.txt .
+# # Set environment
+# ENV PYTHONDONTWRITEBYTECODE 1
+# ENV PYTHONUNBUFFERED 1
+ENV PYTHONPATH="${PYTHONPATH}:/app"
+
+# Install dependencies
+# Copiando os arquivos a partir da RAIZ do projeto
+COPY services/frontend/tests/requirements.txt .
 
 # RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# COPY . .
-# COPY src/ src/
-COPY ../..config/ services/config/
+# Copy project files
+COPY services/frontend/tests/ .
+
+COPY services/config/ services/config/
 
 # COPY mock_backend.py .
 

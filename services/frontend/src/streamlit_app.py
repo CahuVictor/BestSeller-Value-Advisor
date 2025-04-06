@@ -1,4 +1,6 @@
 import streamlit as st
+import sys
+sys.path.append('/app')
 from services.config import settings
 
 st.set_page_config(page_title="BestSeller Value Advisor", layout="centered")
@@ -19,6 +21,11 @@ Use o menu à esquerda para:
 if "modo_teste" not in st.session_state:
     st.session_state["modo_teste"] = False
 
+if "endpoints" not in st.session_state:
+    st.session_state["endpoints"] = (
+        settings.ENDPOINTS_MOCK if st.session_state["modo_teste"] else settings.ENDPOINTS
+    )
+
 # Exibir botão de ativar/desativar mock se a flag estiver habilitada
 if settings.SHOW_TEST_BUTTON:
     col1, col2 = st.columns(2)
@@ -32,5 +39,8 @@ if settings.SHOW_TEST_BUTTON:
 # Mostra o modo atual
 st.markdown(f"**Modo atual:** {'🧪 Teste (Mock)' if st.session_state['modo_teste'] else '🚀 Produção'}")
 
-# Armazena flag para ser usada em outras páginas
-st.session_state["url_base"] = "http://mock-backend:8000" if st.session_state["modo_teste"] else "http://backend:8000"
+# Define os endpoints dinamicamente
+if st.session_state["modo_teste"]:
+    st.session_state["endpoints"] = settings.ENDPOINTS_MOCK
+else:
+    st.session_state["endpoints"] = settings.ENDPOINTS

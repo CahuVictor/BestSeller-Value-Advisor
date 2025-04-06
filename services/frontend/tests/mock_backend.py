@@ -6,7 +6,7 @@ import io
 import sys
 import os
 sys.path.append('/app')
-from services.config import settings_old
+from services.config import settings
 
 # docker build -t mock-backend .
 # docker run -p 8000:8000 --name mock-backend-container --rm mock-backend
@@ -23,17 +23,17 @@ class Livro(BaseModel):
     preco_min: float
     ano: int
 
-@app.post("/inferir")
+@app.post(settings.ENDPOINT_INFERENCIA)
 def inferir(livro: Livro):
     print("🔍 Mock recebido: inferência")
     return {"mensagem": "Mock: livro recebido para inferência"}
 
-@app.post("/treinar")
+@app.post(settings.ENDPOINT_TREINAMENTO)
 def treinar():
     print("🧠 Mock recebido: treinamento")
     return {"mensagem": "Mock: modelo treinado com sucesso"}
 
-@app.post("/ingest")
+@app.post(settings.ENDPOINT_INGESTAO)
 async def ingest(file: UploadFile = File(...)):
     content = await file.read()
     print(f"📥 Mock recebido: CSV com {len(content)} bytes")
