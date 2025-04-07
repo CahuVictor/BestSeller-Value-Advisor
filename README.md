@@ -177,7 +177,6 @@ bestseller-value-advisor/
 │   │   │   │   ├── model/                        # Código da arquitetura do modelo
 │   │   │   │   │   └── autoencoder.py            # Definição do modelo em si
 │   │   │   │   └── train.py                      # Pipeline de treinamento principal
-│   │   │   ├── trained_models/                   # Modelos treinados salvos (artefatos)
 │   │   │   ├── Dockerfile
 │   │   │   ├── requirements.txt
 │   │   │   └── tests/                            # Testes focados em treinamento
@@ -201,10 +200,10 @@ bestseller-value-advisor/
 │   │   │
 │   │   ├── schemas/                              # Schemas de validação (pydantic, marshmallow, etc.)
 │   │   ├── trained_models/                       # Modelos treinados salvos (artefatos)
-│   │   │   ├── scaler/                           # Scalers, transformações serializadas
-│   │   │   ├── model/                            # 
-│   │   │   └── analyse/                          # 
-│   │   ├── scripts/                      # Scripts auxiliares (ex: data cleaning)
+│   │   │   ├── scaler.pkl                        # Scalers, transformações serializadas
+│   │   │   ├── model.tflite                      # 
+│   │   │   └── threshold_inference.py            # 
+│   │   ├── scripts/                              # Scripts auxiliares (ex: data cleaning)
 │   │   │   └── data_cleaning.py
 │   │   ├── Dockerfile (opcional, caso queira empacotar todo o backend)
 │   │   └── tests/                                # Testes gerais do backend (separados ou integrados)

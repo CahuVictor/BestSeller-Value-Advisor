@@ -32,27 +32,6 @@ services:
       # - db_data:/var/lib/postgresql/data
       - ./services/database/scripts:/docker-entrypoint-initdb.d
 
-  frontend:
-    build:
-      context: .
-      dockerfile: services/frontend/Dockerfile
-    image: bestseller/streamlit
-    container_name: bestseller-streamlit-container
-    ports:
-      - "8501:8501"
-    # volumes:
-    #   - .:/app
-    # depends_on:
-    #   - mock-backend
-    environment:
-      # - ENDPOINT_URL=http://mock-backend
-      # - ENDPOINT_PORT=8000
-      # - ENDPOINT_INFERENCIA=/inferir
-      # - ENDPOINT_TREINAMENTO=/treinar
-      # - ENDPOINT_INGESTAO=/ingest
-      - SHOW_TEST_BUTTON=true
-      # - PYTHONUNBUFFERED=1
-
   model_training:
     build:
       context: .
@@ -76,11 +55,45 @@ services:
       - DB_PASS=password
       - DB_NAME=bestsellers
 
-  # inferencia:
-  #   build: ./inference
-  #   command: ["python", "infer.py"]
-  #   depends_on:
-  #     - db
+  inference:
+    build:
+      context: .
+      dockerfile: ./services/backend/inference/Dockerfile
+    image: bestseller/inference
+    container_name: bestseller-inference-container
+    volumes:
+      - ./services/backend/trained_models:/services/trained_models
+      - ./services/backend/inference/src:/app/src
+    ports:
+      - "8003:8000"  # Porta externa 8003, interna 8000
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=user
+      - DB_PASS=password
+      - DB_NAME=bestsellers
+
+  frontend:
+    build:
+      context: .
+      dockerfile: services/frontend/Dockerfile
+    image: bestseller/streamlit
+    container_name: bestseller-streamlit-container
+    ports:
+      - "8501:8501"
+    volumes:
+      # - .:/app
+      - ./services/frontend/src:/app/src
+    # depends_on:
+    #   - mock-backend
+    environment:
+      # - ENDPOINT_URL=http://mock-backend
+      # - ENDPOINT_PORT=8000
+      # - ENDPOINT_INFERENCIA=/inferir
+      # - ENDPOINT_TREINAMENTO=/treinar
+      # - ENDPOINT_INGESTAO=/ingest
+      - SHOW_TEST_BUTTON=true
+      # - PYTHONUNBUFFERED=1
 
   mock-backend:
     build:

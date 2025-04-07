@@ -1,5 +1,9 @@
 import os
 
+# -------------------------------------------------
+# CONFIGURAÇÕES PARA Os ENDPOINTS
+# -------------------------------------------------
+
 # Hosts separados por ambiente
 URL_MOCK = os.getenv("ENDPOINT_URL_MOCK", "http://mock-backend")
 URL_INGEST = os.getenv("ENDPOINT_URL_INGEST", "http://data_ingestion")
@@ -31,8 +35,16 @@ ENDPOINTS = {
     "INGESTAO": BASE_INGEST + os.getenv("ENDPOINT_INGESTAO", ENDPOINT_INGESTAO)
 }
 
+# -------------------------------------------------
+# CONFIGURAÇÕES PARA O FRONTEND
+# -------------------------------------------------
+
 # Ativa ou não o modo de exibição do botão de alternância de teste
 SHOW_TEST_BUTTON = os.getenv("SHOW_TEST_BUTTON", "false").lower() == "true"
+
+# -------------------------------------------------
+# CONFIGURAÇÕES PARA O DATA INGESTION
+# -------------------------------------------------
 
 # Arquivos CSV válidos para upload
 VALID_CSV_FILES = [
@@ -47,7 +59,7 @@ CSV_TABLE_MAPPING = {
 }
 
 # -------------------------------------------------
-# NOVAS CONFIGURAÇÕES PARA O SERVIÇO DE TREINAMENTO
+# CONFIGURAÇÕES PARA O SERVIÇO DE TREINAMENTO
 # -------------------------------------------------
 
 # Tabelas que serão utilizadas no treinamento:
@@ -60,3 +72,14 @@ TRAINED_MODELS_DIR = "/services/trained_models"
 # Nomes dos arquivos do modelo e scaler
 TFLITE_MODEL_FILENAME = "model.tflite"
 SCALER_FILENAME = "scaler.pkl"
+
+# -------------------------------------------------
+# CONFIGURAÇÕES PARA O SERVIÇO DE INFERÊNCIA
+# -------------------------------------------------
+
+# Número máximo de combinações geradas para inferência (ex.: 100)
+MAX_COMBINATIONS = int(os.getenv("MAX_COMBINATIONS", 100))
+# Multiplicador para definir o intervalo superior do preço (ex.: 3 vezes o preço mínimo)
+PRICE_MULTIPLIER = int(os.getenv("PRICE_MULTIPLIER", 3))
+# Número mínimo de combinações com erro abaixo do threshold para considerar o livro apto
+MIN_SUCCESSFUL_COMBINATIONS = int(os.getenv("MIN_SUCCESSFUL_COMBINATIONS", 20))
